@@ -1,46 +1,172 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+window.App = new Vue({
+  data: {
+    title: 'Encuentra charlas',
+    schedule: [],
+    section: 'home',
+    left_icon: 'fa-bars',
+    left_action: null,
+    currentHour: moment().format('HH:mm'),
+    sections: {
+      home: {
+        title: 'Encuentra charlas',
+        left_icon: 'fa-bars',
+        left_action: null,
+      },
+      schedule: {
+        title: 'Charlas',
+        left_icon: 'fa-arrow-left',
+        left_action: 'home',
+
+        subs: {
+          now: {
+            title: 'Charlas ahora',
+            default_filter: 'talksHappeningNow',
+          },
+          next: {
+            title: 'Charlas siguientes',
+            default_filter: 'talksHappeningNext',
+          },
+          today: {
+            title: 'Programa hoy',
+            default_filter: 'talksToday',
+          },
+
+          // Routes by day
+          day1: { title: 'Programa Lunes', default_filter: 'talksDay1' },
+          day2: { title: 'Programa Martes', default_filter: 'talksDay2' },
+          day3: { title: 'Programa Miércoles', default_filter: 'talksDay3' },
+          day4: { title: 'Programa Jueves', default_filter: 'talksDay4' },
+          day5: { title: 'Programa Viernes', default_filter: 'talksDay5' },
+
+          // Routes by area
+          area1: { title: 'Cursos', default_filter: 'talksArea1' },
+          area2: { title: 'Ponencias', default_filter: 'talksArea2' },
+          area3: { title: 'Reportes de tesis', default_filter: 'talksArea3' },
+        },
+      },
+    },
+  },
+
+  beforeMount: function () {
+    console.log('about to mount');
+  },
+
+  created: function () {
+    var self = this;
+
+    setInterval(function () {
+      self.currentHour = moment().format('HH:mm');
+    }, 2000);
+  },
+
+  computed: {
+    talksHappeningNow: function () {
+      var now = this.currentHour;
+      var day = moment().format('d');
+
+      return this.schedule.schedule.filter((talk) => {
+        return talk.day == day && talk.from <= now && talk.to > now;
+      });
     },
 
-    // deviceready Event Handler
-    //
-    // Bind any cordova events here. Common events are:
-    // 'pause', 'resume', etc.
-    onDeviceReady: function() {
-        this.receivedEvent('deviceready');
+    nextTime: function () {
+      var now = this.currentHour;
+
+      return this.schedule.marks.find(item => item > now);
     },
 
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+    talksHappeningNext: function () {
+      var day = moment().format('d');
+      var nextTime = this.nextTime;
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
+      return this.schedule.schedule.filter((talk) => {
+        return talk.day == day && talk.from <= nextTime && talk.to > nextTime;
+      });
+    },
 
-        console.log('Received Event: ' + id);
-    }
-};
+    talksToday: function () {
+      var day = moment().format('d');
 
-app.initialize();
+      return this.schedule.schedule.filter((talk) => {
+        return talk.day == day;
+      });
+    },
+
+    // filters by day
+    talksDay1: function () { return this.schedule.schedule.filter((talk) => talk.day == '1') },
+    talksDay2: function () { return this.schedule.schedule.filter((talk) => talk.day == '2') },
+    talksDay3: function () { return this.schedule.schedule.filter((talk) => talk.day == '3') },
+    talksDay4: function () { return this.schedule.schedule.filter((talk) => talk.day == '4') },
+    talksDay5: function () { return this.schedule.schedule.filter((talk) => talk.day == '5') },
+
+    // filters by area
+    talksArea1: function () { return this.schedule.schedule.filter((talk) => talk.area == 'Cursos') },
+    talksArea2: function () { return this.schedule.schedule.filter((talk) => talk.area == 'Ponencias') },
+    talksArea3: function () { return this.schedule.schedule.filter((talk) => talk.area == 'R. de tesis') },
+  },
+
+  methods: {
+    talksNowClick: function () {
+      this.changeSection('schedule', 'now');
+    },
+
+    talksNextClick: function () {
+      this.changeSection('schedule', 'next');
+    },
+
+    scheduleClick: function () {
+      this.changeSection('schedule', 'today');
+    },
+
+    runLeftAction: function () {
+      if (this.left_action === null) {
+        this.showPanel();
+        return;
+      }
+
+      this.changeSection(this.left_action);
+    },
+
+    scheduleByDay: function (event) {
+      var day = event.target.dataset.day;
+
+      this.changeSection('schedule', `day${day}`);
+    },
+
+    scheduleByArea: function (event) {
+      var area = event.target.dataset.area;
+
+      this.changeSection('schedule', `area${area}`);
+    },
+
+    showPanel: function () {
+      document.getElementById('left-panel').classList = [];
+      document.getElementById('overlay').classList = [];
+    },
+
+    hidePanel: function () {
+      document.getElementById('left-panel').className = "off";
+      document.getElementById('overlay').className = "off";
+    },
+
+    changeSection: function (section, sub) {
+      this.hidePanel();
+
+      this.section = section;
+      this.title = this.sections[section].title;
+      this.left_icon = this.sections[section].left_icon;
+      this.left_action = this.sections[section].left_action;
+
+      if (this.sections[section].subs && sub) {
+        this.title = this.sections[section].subs[sub].title;
+        this.default_filter = this.sections[section].subs[sub].default_filter;
+      }
+    },
+  },
+});
+
+document.addEventListener('deviceready', function () {
+  App.$mount('#app');
+
+  document.getElementById('loader').className = 'off';
+}, false);
