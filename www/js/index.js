@@ -2,6 +2,29 @@ window.App = new Vue({
   data: {
     title: 'Encuentra charlas',
     schedule: [],
+    marks: [
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30",
+      "17:00",
+      "17:30",
+      "18:00",
+      "18:30",
+      "19:00",
+    ],
     section: 'home',
     left_icon: 'fa-bars',
     left_action: null,
@@ -47,10 +70,6 @@ window.App = new Vue({
     },
   },
 
-  beforeMount: function () {
-    console.log('about to mount');
-  },
-
   created: function () {
     var self = this;
 
@@ -64,7 +83,7 @@ window.App = new Vue({
       var now = this.currentHour;
       var day = moment().format('d');
 
-      return this.schedule.schedule.filter((talk) => {
+      return this.schedule.filter((talk) => {
         return talk.day == day && talk.from <= now && talk.to > now;
       });
     },
@@ -72,14 +91,14 @@ window.App = new Vue({
     nextTime: function () {
       var now = this.currentHour;
 
-      return this.schedule.marks.find(item => item > now);
+      return this.marks.find(item => item > now);
     },
 
     talksHappeningNext: function () {
       var day = moment().format('d');
       var nextTime = this.nextTime;
 
-      return this.schedule.schedule.filter((talk) => {
+      return this.schedule.filter((talk) => {
         return talk.day == day && talk.from <= nextTime && talk.to > nextTime;
       });
     },
@@ -87,22 +106,22 @@ window.App = new Vue({
     talksToday: function () {
       var day = moment().format('d');
 
-      return this.schedule.schedule.filter((talk) => {
+      return this.schedule.filter((talk) => {
         return talk.day == day;
       });
     },
 
     // filters by day
-    talksDay1: function () { return this.schedule.schedule.filter((talk) => talk.day == '1') },
-    talksDay2: function () { return this.schedule.schedule.filter((talk) => talk.day == '2') },
-    talksDay3: function () { return this.schedule.schedule.filter((talk) => talk.day == '3') },
-    talksDay4: function () { return this.schedule.schedule.filter((talk) => talk.day == '4') },
-    talksDay5: function () { return this.schedule.schedule.filter((talk) => talk.day == '5') },
+    talksDay1: function () { return this.schedule.filter((talk) => talk.day == '1') },
+    talksDay2: function () { return this.schedule.filter((talk) => talk.day == '2') },
+    talksDay3: function () { return this.schedule.filter((talk) => talk.day == '3') },
+    talksDay4: function () { return this.schedule.filter((talk) => talk.day == '4') },
+    talksDay5: function () { return this.schedule.filter((talk) => talk.day == '5') },
 
     // filters by area
-    talksArea1: function () { return this.schedule.schedule.filter((talk) => talk.area == 'Cursos') },
-    talksArea2: function () { return this.schedule.schedule.filter((talk) => talk.area == 'Ponencias') },
-    talksArea3: function () { return this.schedule.schedule.filter((talk) => talk.area == 'R. de tesis') },
+    talksArea1: function () { return this.schedule.filter((talk) => talk.area == 'Cursos') },
+    talksArea2: function () { return this.schedule.filter((talk) => talk.area == 'Ponencias') },
+    talksArea3: function () { return this.schedule.filter((talk) => talk.area == 'R. de tesis') },
   },
 
   methods: {
