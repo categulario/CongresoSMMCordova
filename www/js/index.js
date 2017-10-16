@@ -70,6 +70,22 @@ window.App = new Vue({
     },
   },
 
+  mounted: function () {
+    this.setLoader('Checando actualizaciones...');
+
+    let checksum = localStorage.getItem('checksum');
+
+    if (!checksum) {
+      console.log('will request');
+
+      reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
+        console.log(resp);
+      });
+    } else {
+      console.log(checksum);
+    }
+  },
+
   created: function () {
     var self = this;
 
