@@ -44,6 +44,12 @@ body {
 #loader.off {
     z-index: -1;
 }
+#loader > .loader-body {
+    text-align: center;
+    font-weight: bold;
+}
+#loader.message {
+}
 
 .container {
     height: 100vh;

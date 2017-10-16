@@ -141,6 +141,11 @@ window.App = new Vue({
   },
 
   methods: {
+    setLoader: function(msg) {
+      document.getElementById('loader').className = 'on';
+      document.getElementById('loader-message').innerHTML = msg;
+    },
+
     talksNowClick: function () {
       this.changeSection('schedule', 'now');
     },
@@ -202,6 +207,4 @@ window.App = new Vue({
 
 document.addEventListener('deviceready', function () {
   App.$mount('#app');
-
-  document.getElementById('loader').className = 'off';
 }, false);
