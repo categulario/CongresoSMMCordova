@@ -25,6 +25,7 @@ window.App = new Vue({
       "18:30",
       "19:00",
     ],
+    last_checksum: '',
     section: 'home',
     left_icon: 'fa-bars',
     left_action: null,
