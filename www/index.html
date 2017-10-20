@@ -50,7 +50,7 @@
 
           <div
             class="schedule-item"
-            v-for="item in this[default_filter]"
+            v-for="item in this[default_filter].filter(this.filterSearch)"
           >
             <div class="schedule-item-wrapper">
               <strong class="schedule-title">{{ item.title }}</strong><br>
@@ -79,7 +79,7 @@
           </div>
 
           <div class="schedule-empty" v-if="this[default_filter].length === 0">
-            No hay ninguna plática, ve a comer algo
+            No hay ninguna plática, {{ this.randomMessage() }}
           </div>
         </div>
       </div>

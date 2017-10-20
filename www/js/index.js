@@ -75,11 +75,6 @@ window.App = new Vue({
           day3: { title: 'Programa Miércoles', default_filter: 'talksDay3' },
           day4: { title: 'Programa Jueves', default_filter: 'talksDay4' },
           day5: { title: 'Programa Viernes', default_filter: 'talksDay5' },
-
-          // Routes by area
-          area1: { title: 'Cursos', default_filter: 'talksArea1' },
-          area2: { title: 'Ponencias', default_filter: 'talksArea2' },
-          area3: { title: 'Reportes de tesis', default_filter: 'talksArea3' },
         },
       },
     },
@@ -147,7 +142,7 @@ window.App = new Vue({
     },
 
     talksHappeningNext: function () {
-      var day = moment().format('d');
+      var day = this.daymap[moment().format('d')];
       var nextTime = this.nextTime;
 
       return this.schedule.filter((talk) => {
@@ -164,15 +159,7 @@ window.App = new Vue({
     },
 
     all: function () {
-      var st = this.normalize(this.searchterm);
-
-      if (!st) {
-        return this.schedule;
-      } else {
-        return this.schedule.filter(function (item) {
-          return item.blob.indexOf(st) >= 0;
-        });
-      }
+      return this.schedule;
     },
 
     // filters by day
@@ -181,11 +168,6 @@ window.App = new Vue({
     talksDay3: function () { return this.schedule.filter((talk) => talk.day == 'miercoles') },
     talksDay4: function () { return this.schedule.filter((talk) => talk.day == 'jueves') },
     talksDay5: function () { return this.schedule.filter((talk) => talk.day == 'viernes') },
-
-    // filters by area
-    talksArea1: function () { return this.schedule.filter((talk) => talk.area == 'Cursos') },
-    talksArea2: function () { return this.schedule.filter((talk) => talk.area == 'Ponencias') },
-    talksArea3: function () { return this.schedule.filter((talk) => talk.area == 'R. de tesis') },
   },
 
   methods: {
@@ -200,6 +182,32 @@ window.App = new Vue({
       r = r.replace(new RegExp(/[ùúûü]/g),"u");
 
       return r;
+    },
+
+    randomMessage: function () {
+      var max = 10;
+      return [
+        've a comer algo.',
+        've a explorar la ciudad.',
+        'salta en una pierna.',
+        'párate de cabeza.',
+        'aprende a programar.',
+        'háblale a un extraño.',
+        'aprende esperanto.',
+        'trepa un árbol.',
+        'cómprate algo lindo.',
+        'instala linux.',
+      ][Math.floor(Math.random() * max)];
+    },
+
+    filterSearch: function (item) {
+      var st = this.normalize(this.searchterm);
+
+      if (!st) {
+        return true;
+      } else {
+        return item.blob.indexOf(st) >= 0;
+      }
     },
 
     setLoader: function (msg) {
