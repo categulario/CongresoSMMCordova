@@ -39,6 +39,7 @@
           <button class="btn" @click="scheduleClick">Programa de hoy</button>
           <button class="btn" @click="talksNextClick" v-if="nextTime">¿A qué puedo entrar a las {{ nextTime }}?</button>
           <button class="btn" @click="talksNowClick">¿A qué puedo entrar ahora?</button>
+          <button class="btn" @click="findTalksClick"><i class="fa fa-search"></i> Buscar pláticas</button>
         </div>
 
         <div
@@ -92,15 +93,6 @@
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="3" href="#">Miércoles</a></div>
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="4" href="#">Jueves</a></div>
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="5" href="#">Viernes</a></div>
-
-          <div class="panel-item-title">
-            Programa por área <span class="beta">
-              <i class="fa fa-bolt"></i>Beta<i class="fa fa-bolt"></i>
-            </span>
-          </div>
-          <div class="panel-item"><a @click.prevent="scheduleByArea" data-area="1" href="#">Cursos</a></div>
-          <div class="panel-item"><a @click.prevent="scheduleByArea" data-area="2" href="#">Ponencias</a></div>
-          <div class="panel-item"><a @click.prevent="scheduleByArea" data-area="3" href="#">Reportes de tesis</a></div>
         </div>
       </div>
 

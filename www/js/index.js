@@ -36,6 +36,11 @@ window.App = new Vue({
         left_icon: 'fa-bars',
         left_action: null,
       },
+      find: {
+        title: 'Busca pláticas',
+        left_icon: 'fa-search',
+        left_action: 'home',
+      },
       schedule: {
         title: 'Charlas',
         left_icon: 'fa-arrow-left',
@@ -163,6 +168,10 @@ window.App = new Vue({
 
     scheduleClick: function () {
       this.changeSection('schedule', 'today');
+    },
+
+    findTalksClick: function () {
+      this.changeSection('find');
     },
 
     runLeftAction: function () {
