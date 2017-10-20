@@ -98,6 +98,10 @@ window.App = new Vue({
           ponencias.push(ponencia);
         }.bind(this));
 
+        ponencias.sort(function (a, b) {
+          return a.from > b.from;
+        });
+
         this.schedule = ponencias;
 
         this.unsetLoader();
