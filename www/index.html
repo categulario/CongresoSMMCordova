@@ -42,10 +42,12 @@
           <button class="btn" @click="findTalksClick"><i class="fa fa-search"></i> Buscar pláticas</button>
         </div>
 
-        <div
-          class="schedule-list"
-          v-if="section=='schedule'"
-        >
+        <div class="schedule-list" v-if="section=='schedule'" >
+          <div class="search-box">
+            <input placeholder="Escribe aquí" v-model="searchterm">
+            <div class="search-clear"><i class="fa fa-times"></i></div>
+          </div>
+
           <div
             class="schedule-item"
             v-for="item in this[default_filter]"

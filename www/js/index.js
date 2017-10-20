@@ -39,16 +39,12 @@ window.App = new Vue({
       'viernes',
       'sabado',
     ],
+    searchterm: '',
     sections: {
       home: {
         title: 'Encuentra charlas',
         left_icon: 'fa-bars',
         left_action: null,
-      },
-      find: {
-        title: 'Busca pláticas',
-        left_icon: 'fa-search',
-        left_action: 'home',
       },
       schedule: {
         title: 'Charlas',
@@ -67,6 +63,10 @@ window.App = new Vue({
           today: {
             title: 'Programa hoy',
             default_filter: 'talksToday',
+          },
+          find: {
+            title: 'Buscar en todas partes',
+            default_filter: 'all',
           },
 
           // Routes by day
@@ -95,6 +95,21 @@ window.App = new Vue({
         var ponencias = [];
 
         resp.ponencias.forEach(function (ponencia) {
+          var blob = '';
+
+          [
+            "day",
+            "place",
+            "area",
+            "title",
+            "author",
+            "modality",
+          ].forEach(function (prop) {
+            blob += ' - ' + (ponencia[prop] || '');
+          });
+
+          ponencia.blob = this.normalize(blob);
+
           ponencias.push(ponencia);
         }.bind(this));
 
@@ -148,6 +163,18 @@ window.App = new Vue({
       });
     },
 
+    all: function () {
+      var st = this.normalize(this.searchterm);
+
+      if (!st) {
+        return this.schedule;
+      } else {
+        return this.schedule.filter(function (item) {
+          return item.blob.indexOf(st) >= 0;
+        });
+      }
+    },
+
     // filters by day
     talksDay1: function () { return this.schedule.filter((talk) => talk.day == 'lunes') },
     talksDay2: function () { return this.schedule.filter((talk) => talk.day == 'martes') },
@@ -162,6 +189,19 @@ window.App = new Vue({
   },
 
   methods: {
+    normalize: function (s) {
+      var r = s.toLowerCase();
+
+      r = r.replace(new RegExp(/[àáâãäå]/g),"a");
+      r = r.replace(new RegExp(/[èéêë]/g),"e");
+      r = r.replace(new RegExp(/[ìíîï]/g),"i");
+      r = r.replace(new RegExp(/ñ/g),"n");
+      r = r.replace(new RegExp(/[òóôõö]/g),"o");
+      r = r.replace(new RegExp(/[ùúûü]/g),"u");
+
+      return r;
+    },
+
     setLoader: function (msg) {
       document.getElementById('loader-message').innerHTML = msg;
       document.getElementById('loader').className = 'on';
@@ -184,7 +224,7 @@ window.App = new Vue({
     },
 
     findTalksClick: function () {
-      this.changeSection('find');
+      this.changeSection('schedule', 'find');
     },
 
     runLeftAction: function () {
