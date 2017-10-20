@@ -8,7 +8,7 @@
         @Categulario
     </author>
     <content src="index.html" />
-    <access origin="http://www.smm.org.mx" />
+    <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

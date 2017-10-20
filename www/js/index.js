@@ -98,12 +98,10 @@ window.App = new Vue({
           var blob = '';
 
           [
-            "day",
             "place",
             "area",
             "title",
             "author",
-            "modality",
           ].forEach(function (prop) {
             blob += ' - ' + (ponencia[prop] || '');
           });
@@ -120,6 +118,8 @@ window.App = new Vue({
         this.schedule = ponencias;
 
         this.unsetLoader();
+      }.bind(this), function (err) {
+        this.setLoader('Error de conexión ):');
       }.bind(this));
     }
   },
@@ -225,6 +225,10 @@ window.App = new Vue({
 
     findTalksClick: function () {
       this.changeSection('schedule', 'find');
+    },
+
+    clearSearch: function () {
+      this.searchterm = '';
     },
 
     runLeftAction: function () {
