@@ -72,27 +72,29 @@ window.App = new Vue({
   },
 
   mounted: function () {
-    this.setLoader('Checando actualizaciones...');
+    this.setLoader('Verificando datos...');
 
-    let checksum = localStorage.getItem('checksum');
+    var last_time = localStorage.getItem('last_update');
 
-    if (!checksum) {
-      console.log('will request');
-
+    if (!last_time) {
       reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
-        console.log(resp);
-      });
-    } else {
-      console.log(checksum);
+        var ponencias = [];
+
+        resp.ponencias.forEach(function (ponencia) {
+          ponencias.push(ponencia);
+        }.bind(this));
+
+        this.schedule = ponencias;
+
+        this.unsetLoader();
+      }.bind(this));
     }
   },
 
   created: function () {
-    var self = this;
-
     setInterval(function () {
-      self.currentHour = moment().format('HH:mm');
-    }, 2000);
+      this.currentHour = moment().format('HH:mm');
+    }.bind(this), 2000);
   },
 
   computed: {
@@ -142,9 +144,13 @@ window.App = new Vue({
   },
 
   methods: {
-    setLoader: function(msg) {
-      document.getElementById('loader').className = 'on';
+    setLoader: function (msg) {
       document.getElementById('loader-message').innerHTML = msg;
+      document.getElementById('loader').className = 'on';
+    },
+
+    unsetLoader: function () {
+      document.getElementById('loader').className = 'off';
     },
 
     talksNowClick: function () {
