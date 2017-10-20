@@ -30,6 +30,15 @@ window.App = new Vue({
     left_icon: 'fa-bars',
     left_action: null,
     currentHour: moment().format('HH:mm'),
+    daymap: [
+      'domingo',
+      'lunes',
+      'martes',
+      'miercoles',
+      'jueves',
+      'viernes',
+      'sabado',
+    ],
     sections: {
       home: {
         title: 'Encuentra charlas',
@@ -105,7 +114,7 @@ window.App = new Vue({
   computed: {
     talksHappeningNow: function () {
       var now = this.currentHour;
-      var day = moment().format('d');
+      var day = this.daymap[moment().format('d')];
 
       return this.schedule.filter((talk) => {
         return talk.day == day && talk.from <= now && talk.to > now;
@@ -128,7 +137,7 @@ window.App = new Vue({
     },
 
     talksToday: function () {
-      var day = moment().format('d');
+      var day = this.daymap[moment().format('d')];
 
       return this.schedule.filter((talk) => {
         return talk.day == day;
@@ -136,11 +145,11 @@ window.App = new Vue({
     },
 
     // filters by day
-    talksDay1: function () { return this.schedule.filter((talk) => talk.day == '1') },
-    talksDay2: function () { return this.schedule.filter((talk) => talk.day == '2') },
-    talksDay3: function () { return this.schedule.filter((talk) => talk.day == '3') },
-    talksDay4: function () { return this.schedule.filter((talk) => talk.day == '4') },
-    talksDay5: function () { return this.schedule.filter((talk) => talk.day == '5') },
+    talksDay1: function () { return this.schedule.filter((talk) => talk.day == 'lunes') },
+    talksDay2: function () { return this.schedule.filter((talk) => talk.day == 'martes') },
+    talksDay3: function () { return this.schedule.filter((talk) => talk.day == 'miercoles') },
+    talksDay4: function () { return this.schedule.filter((talk) => talk.day == 'jueves') },
+    talksDay5: function () { return this.schedule.filter((talk) => talk.day == 'viernes') },
 
     // filters by area
     talksArea1: function () { return this.schedule.filter((talk) => talk.area == 'Cursos') },
