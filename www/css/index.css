@@ -124,7 +124,7 @@ body {
 }
 
 .schedule-item {
-    background-color: var(--color-mid);
+    background-color: var(--color-light);
     margin-bottom: 10px;
 }
 
