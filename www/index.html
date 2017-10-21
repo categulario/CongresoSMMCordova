@@ -62,7 +62,7 @@
                 <span>{{ item.from }}-{{ item.to }} {{ item.day }}</span>
                 <span>{{ item.area }}</span>
               </div>
-              <div class="schedule-star" :data-id="item.id" @click="toggleStar" :class="{ star: item.star }"><i class="fa fa-star"></i></div>
+              <div class="schedule-star" :data-id="item.id" @click.prevent="toggleStar" :class="{ star: item.star }"><i class="fa fa-star"></i></div>
             </div>
             <div class="schedule-item-progress">
               <item-progress
@@ -96,6 +96,8 @@
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="3" href="#">Miércoles</a></div>
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="4" href="#">Jueves</a></div>
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="5" href="#">Viernes</a></div>
+          <div class="panel-item-title">Mis pláticas</div>
+          <div class="panel-item"><a @click.prevent="scheduleByStar" href="#">Pláticas con estrella</a></div>
         </div>
       </div>
 

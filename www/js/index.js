@@ -68,6 +68,10 @@ window.App = new Vue({
             title: 'Buscar en todas partes',
             default_filter: 'all',
           },
+          star: {
+            title: 'Mis pláticas favoritas',
+            default_filter: 'starFilter',
+          },
 
           // Routes by day
           day1: { title: 'Programa Lunes', default_filter: 'talksDay1' },
@@ -169,6 +173,12 @@ window.App = new Vue({
 
     all: function () {
       return this.schedule;
+    },
+
+    starFilter: function () {
+      return this.schedule.filter(function (talk) {
+        return talk.star;
+      });
     },
 
     // filters by day
@@ -279,6 +289,10 @@ window.App = new Vue({
       var day = event.target.dataset.day;
 
       this.changeSection('schedule', `day${day}`);
+    },
+
+    scheduleByStar: function () {
+      this.changeSection('schedule', 'star');
     },
 
     scheduleByArea: function (event) {
