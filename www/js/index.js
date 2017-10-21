@@ -195,16 +195,16 @@ window.App = new Vue({
     randomMessage: function () {
       var max = 10;
       return [
-        've a comer algo.',
-        've a explorar la ciudad.',
-        'salta en una pierna.',
-        'párate de cabeza.',
-        'aprende a programar.',
-        'háblale a un extraño.',
-        'aprende esperanto.',
-        'trepa un árbol.',
-        'cómprate algo lindo.',
-        'instala linux.',
+        'como que hace hace hambre ¿no?',
+        'lo mejor sería ir a explorar la ciudad',
+        'es momento de organizar la reta de peteca',
+        '¿ya te sabes parar de cabeza?',
+        'mejor aprende un lenguaje nuevo de programación',
+        'el momento ideal para hacer amigos de otro estado',
+        'quizá es momento de aprender esperanto',
+        'es tiempo perfecto para trepar un árbol',
+        '¿ya compraste recuerditos locales?',
+        'el momento ideal para instalar linux',
       ][Math.floor(Math.random() * max)];
     },
 
