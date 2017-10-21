@@ -81,11 +81,13 @@ window.App = new Vue({
   },
 
   mounted: function () {
-    this.setLoader('Verificando datos...');
+    this.setLoader('Iniciando la magia...');
 
     var last_time = localStorage.getItem('last_update');
 
     if (!last_time) {
+      this.setLoader('No tengo el horario, descargando...');
+
       reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
         var ponencias = [];
 
@@ -112,10 +114,16 @@ window.App = new Vue({
 
         this.schedule = ponencias;
 
+        this.setLoader('Guardando información...');
+        this.persistSchedule();
         this.unsetLoader();
       }.bind(this), function (err) {
         this.setLoader('Error de conexión ):');
       }.bind(this));
+    } else {
+      this.setLoader('Me se el horario de memoria, cargando...');
+      this.schedule = this.recoverPersistedSchedule();
+      this.unsetLoader();
     }
   },
 
@@ -208,6 +216,24 @@ window.App = new Vue({
       } else {
         return item.blob.indexOf(st) >= 0;
       }
+    },
+
+    persistSchedule: function () {
+      this.schedule.forEach(function (item) {
+        localStorage.setItem('item:'+item.id, JSON.stringify(item));
+      });
+
+      localStorage.setItem('items', JSON.stringify(this.schedule.map(function (i) {
+        return i.id;
+      })));
+
+      localStorage.setItem('last_update', moment().toISOString());
+    },
+
+    recoverPersistedSchedule: function () {
+      return JSON.parse(localStorage.getItem('items')).map(function (i) {
+        return JSON.parse(localStorage.getItem('item:'+i));
+      });
     },
 
     setLoader: function (msg) {
