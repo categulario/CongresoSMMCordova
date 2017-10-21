@@ -62,6 +62,7 @@
                 <span>{{ item.from }}-{{ item.to }} {{ item.day }}</span>
                 <span>{{ item.area }}</span>
               </div>
+              <div class="schedule-star" :data-id="item.id" @click="toggleStar" :class="{ star: item.star }"><i class="fa fa-star"></i></div>
             </div>
             <div class="schedule-item-progress">
               <item-progress

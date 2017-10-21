@@ -118,7 +118,8 @@ window.App = new Vue({
         this.persistSchedule();
         this.unsetLoader();
       }.bind(this), function (err) {
-        this.setLoader('Error de conexión ):');
+        this.unsetLoader();
+        alert('Error de conexión');
       }.bind(this));
     } else {
       this.setLoader('Me se el horario de memoria, cargando...');
@@ -284,6 +285,33 @@ window.App = new Vue({
       var area = event.target.dataset.area;
 
       this.changeSection('schedule', `area${area}`);
+    },
+
+    toggleStar: function (event) {
+      var id = event.currentTarget.dataset.id;
+
+      this.schedule = this.schedule.map(function (talk) {
+        if (talk.id == id) {
+          talk.star = ! talk.star;
+        }
+
+        return talk;
+      });
+
+      this.persistSchedule();
+    },
+
+    showTalk: function (event) {
+      var id = event.currentTarget.dataset.id;
+
+      this.setLoader('Descargando abstract...');
+
+      reqwest('http://www.smm.org.mx/API/ponencias.php?id='+id, function (res) {
+        console.log(res);
+      }.bind(this), function (err) {
+        alert('Error de conexión');
+        this.unsetLoader();
+      }.bind(this));
     },
 
     showPanel: function () {
