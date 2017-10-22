@@ -50,6 +50,9 @@ window.App = new Vue({
       'sabado'    : 6,
     },
     searchterm: '',
+
+    last_section: '',
+    last_sub: '',
     sections: {
       home: {
         title: 'Encuentra charlas',
@@ -284,6 +287,7 @@ window.App = new Vue({
     },
 
     toggleStar: function (event) {
+      event.stopPropagation();
       var id = event.currentTarget.dataset.id;
 
       this.schedule = this.schedule.map(function (talk) {
@@ -372,7 +376,14 @@ window.App = new Vue({
     changeSection: function (section, sub) {
       this.hidePanel();
 
+      if (section == 'back') {
+        return this.changeSection(this.last_section, this.last_sub);
+      }
+
+      this.last_section = this.section;
+      this.last_sub = this.subsection;
       this.section = section;
+      this.subsection = sub;
       this.title = this.sections[section].title;
       this.left_icon = this.sections[section].left_icon;
       this.left_action = this.sections[section].left_action;
