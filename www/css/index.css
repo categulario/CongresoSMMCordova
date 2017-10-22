@@ -150,6 +150,7 @@ body {
 }
 
 .schedule-item-wrapper {
+    cursor: pointer;
     padding: 10px;
     position: relative;
 }
@@ -283,4 +284,20 @@ body {
 .beta {
     color: var(--color-danger);
     font-style: italic;
+}
+
+.talk-title {
+    padding: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+.talk-right {
+    text-align: right;
+    padding-right: 10px;
+}
+.talk-center {
+    text-align: center;
+}
+.talk-summary {
+    padding: 10px;
 }

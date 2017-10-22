@@ -42,6 +42,15 @@
           <button class="btn" @click="findTalksClick"><i class="fa fa-search"></i> Buscar pláticas</button>
         </div>
 
+        <div class="talk" v-if="section=='talk'">
+          <div class="talk-title">{{ talk.title }}</div>
+          <div class="talk-center">{{ talk.author }}</div>
+          <div class="talk-center">{{ talk.day }} {{ talk.from }}-{{ talk.to }} </div>
+          <div class="talk-center">{{ talk.place }}</div>
+          <div class="talk-right">{{ talk.area }} ({{ talk.modality }})</div>
+          <div class="talk-summary">{{ talk.summary }}</div>
+        </div>
+
         <div class="schedule-list" v-if="section=='schedule'" >
           <div class="search-box">
             <input placeholder="Busca títulos, autores, lugares..." v-model="searchterm">
@@ -52,7 +61,7 @@
             class="schedule-item"
             v-for="item in this[default_filter].filter(this.filterSearch)"
           >
-            <div class="schedule-item-wrapper">
+            <div class="schedule-item-wrapper" :data-id="item.id" @click.prevent="showTalk">
               <strong class="schedule-title">{{ item.title }}</strong><br>
               <span class="schedule-author">
                 {{ item.author}}<br>

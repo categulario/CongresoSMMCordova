@@ -2,6 +2,7 @@ window.App = new Vue({
   data: {
     title: 'Encuentra charlas',
     schedule: [],
+    talk: {},
     marks: [
       "09:00",
       "09:30",
@@ -54,6 +55,11 @@ window.App = new Vue({
         title: 'Encuentra charlas',
         left_icon: 'fa-bars',
         left_action: null,
+      },
+      talk: {
+        title: 'Plática',
+        left_icon: 'fa-arrow-left',
+        left_action: 'back',
       },
       schedule: {
         title: 'Charlas',
@@ -343,8 +349,10 @@ window.App = new Vue({
 
       this.setLoader('Descargando abstract...');
 
-      reqwest('http://www.smm.org.mx/API/ponencias.php?id='+id, function (res) {
-        console.log(res);
+      reqwest('http://www.smm.org.mx/API/ponencia.php?id='+id, function (res) {
+        this.talk = res.ponencias[0];
+        this.changeSection('talk');
+        this.unsetLoader();
       }.bind(this), function (err) {
         alert('Error de conexión');
         this.unsetLoader();
