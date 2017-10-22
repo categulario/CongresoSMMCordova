@@ -307,6 +307,11 @@ window.App = new Vue({
 
     loadData: function () {
       this.setLoader('Descargando horario...');
+      var starred = this.schedule.filter(function (t) {
+        return t.star;
+      }).map(function (t) {
+        return t.id;
+      });
 
       reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
         var ponencias = [];
@@ -324,6 +329,7 @@ window.App = new Vue({
           });
 
           ponencia.blob = this.normalize(blob);
+          ponencia.star = starred.indexOf(ponencia.id)>=0;
 
           ponencias.push(ponencia);
         }.bind(this));
