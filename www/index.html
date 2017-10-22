@@ -45,7 +45,7 @@
         <div class="schedule-list" v-if="section=='schedule'" >
           <div class="search-box">
             <input placeholder="Busca títulos, autores, lugares..." v-model="searchterm">
-            <div class="search-clear" @click="clearSearch"><i class="fa fa-times"></i></div>
+            <div class="search-clear" @click.prevent="clearSearch"><i class="fa fa-times"></i></div>
           </div>
 
           <div
@@ -98,6 +98,8 @@
           <div class="panel-item"><a @click.prevent="scheduleByDay" data-day="5" href="#">Viernes</a></div>
           <div class="panel-item-title">Mis pláticas</div>
           <div class="panel-item"><a @click.prevent="scheduleByStar" href="#">Pláticas con estrella</a></div>
+          <div class="panel-item-title">Utilidades</div>
+          <div class="panel-item"><a @click.prevent="reloadSchedule" href="#">Recargar horarios</a></div>
         </div>
       </div>
 

@@ -39,6 +39,15 @@ window.App = new Vue({
       'viernes',
       'sabado',
     ],
+    dayimap: {
+      'domingo'   : 0,
+      'lunes'     : 1,
+      'martes'    : 2,
+      'miercoles' : 3,
+      'jueves'    : 4,
+      'viernes'   : 5,
+      'sabado'    : 6,
+    },
     searchterm: '',
     sections: {
       home: {
@@ -91,40 +100,7 @@ window.App = new Vue({
 
     if (!last_time) {
       this.setLoader('No tengo el horario, descargando...');
-
-      reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
-        var ponencias = [];
-
-        resp.ponencias.forEach(function (ponencia) {
-          var blob = '';
-
-          [
-            "place",
-            "area",
-            "title",
-            "author",
-          ].forEach(function (prop) {
-            blob += ' - ' + (ponencia[prop] || '');
-          });
-
-          ponencia.blob = this.normalize(blob);
-
-          ponencias.push(ponencia);
-        }.bind(this));
-
-        ponencias.sort(function (a, b) {
-          return a.from > b.from;
-        });
-
-        this.schedule = ponencias;
-
-        this.setLoader('Guardando información...');
-        this.persistSchedule();
-        this.unsetLoader();
-      }.bind(this), function (err) {
-        this.unsetLoader();
-        alert('Error de conexión');
-      }.bind(this));
+      this.loadData();
     } else {
       this.setLoader('Me se el horario de memoria, cargando...');
       this.schedule = this.recoverPersistedSchedule();
@@ -313,6 +289,53 @@ window.App = new Vue({
       });
 
       this.persistSchedule();
+    },
+
+    reloadSchedule: function () {
+      this.loadData();
+    },
+
+    loadData: function () {
+      this.setLoader('Descargando horario...');
+
+      reqwest('http://www.smm.org.mx/API/ponencias.php', function (resp) {
+        var ponencias = [];
+
+        resp.ponencias.forEach(function (ponencia) {
+          var blob = '';
+
+          [
+            "place",
+            "area",
+            "title",
+            "author",
+          ].forEach(function (prop) {
+            blob += ' - ' + (ponencia[prop] || '');
+          });
+
+          ponencia.blob = this.normalize(blob);
+
+          ponencias.push(ponencia);
+        }.bind(this));
+
+        ponencias.sort(function (a, b) {
+          if (a.day == b.day) {
+            return a.from > b.from;
+          }
+
+          return this.dayimap[a.day] > this.dayimap[b.day];
+        }.bind(this));
+
+        this.schedule = ponencias;
+
+        this.setLoader('Guardando información...');
+        this.persistSchedule();
+        this.unsetLoader();
+      }.bind(this), function (err) {
+        this.unsetLoader();
+        console.log(err);
+        alert('Error de conexión');
+      }.bind(this));
     },
 
     showTalk: function (event) {
